@@ -1,0 +1,31 @@
+description: |
+  Demonstrate installing a helm chart with this orb
+
+usage:
+  version: 2.1
+
+orbs:
+  helm: entur/helm@volatile # This orb is not registered yet. 07.05.2019 - Ole Reidar
+
+
+jobs:
+  deploy-application:
+    docker:
+    - image: google/cloud-sdk:latest
+
+    steps:
+      - helm/install-helm-chart:
+          chart: ./helm/$CIRCLE_PROJECT_REPONAME # file structure: helm/projectname/Chart.yaml
+          namespace: $NAMESPACE # From Context
+          release-name: $CIRCLE_PROJECT_REPONAME-my-release-$NAMESPACE # output: projectname-my-release-namespace
+          wait: true # default true, this step is not needed
+
+
+workflows:
+  version: 2.1
+
+  my-workflow:
+    jobs:
+      - deploy-application:
+          name: deploy-to-kubernetes
+          context: a-context-that-contain-namespace-env # This example uses the environment variable $NAMESPACE. It is not required otherwise.
