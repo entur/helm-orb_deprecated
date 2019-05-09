@@ -20,7 +20,21 @@ jobs:
      # do more CircleCI stuff.
 ``` 
          
-Available commands can be found in `src/commands`. Usage examples in `examples`             
+Available commands can be found in `src/commands`. Usage examples in `examples`       
+
+## Development
+
+Enable the pre-commit git hook to automatically pack the orb before a commit. This hook is located in `.githooks/pre-commit`. 
+
+To enable this hook:
+```bash
+git config --local core.hooksPath .githooks/
+chmod +x .githooks/pre-commit
+```
+
+Disclaimer: The commands changes the folder default folder for git hooks locally (only for this project) and gives the script `pre-commit` executable rights. 
+This script checks whether CircleCI is installed and packs the orb automatically to `build/org.yml`.
+      
 
 ## Pack and publish orb
 
