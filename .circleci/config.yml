@@ -38,4 +38,3 @@ workflows:
           orb-ref: entur/helm
           requires:
             - lint
-

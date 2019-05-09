@@ -29,4 +29,3 @@ workflows:
       - deploy-application:
           name: deploy-to-kubernetes
           context: a-context-that-contain-namespace-env # This example uses the environment variable $NAMESPACE. It is not required otherwise.
-

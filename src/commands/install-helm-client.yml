@@ -18,4 +18,3 @@ steps:
         tar -zxv -C /tmp -f /tmp/$HELM_VER.tar.gz
         mv /tmp/linux-amd64/helm /usr/local/bin/helm
         helm init --client-only
-
