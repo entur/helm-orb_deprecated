@@ -17,8 +17,8 @@ workflows:
           filters:
             branches:
               ignore: master
+          checkout: false
           attach-workspace: true
-          orb-path: orb.yml
           orb-ref: entur/helm@dev:$CIRCLE_BRANCH
           requires:
             - pack
@@ -28,8 +28,8 @@ workflows:
           filters:
             branches:
               only: master
+          checkout: false
           attach-workspace: true
-          orb-path: orb.yml
           orb-ref: entur/helm
           requires:
             - lint
