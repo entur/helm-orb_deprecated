@@ -11,7 +11,7 @@ orbs:
 jobs:
   deploy-application:
     docker:
-    - image: google/cloud-sdk:latest
+      - image: google/cloud-sdk:latest
 
     steps:
       - helm/install-helm-chart:
@@ -29,3 +29,4 @@ workflows:
       - deploy-application:
           name: deploy-to-kubernetes
           context: a-context-that-contain-namespace-env # This example uses the environment variable $NAMESPACE. It is not required otherwise.
+

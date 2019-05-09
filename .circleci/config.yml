@@ -2,7 +2,6 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@3.0.0
-  cli: circleci/circleci-cli@0.1.4
 
 executors:
   lint-condo:
@@ -11,17 +10,6 @@ executors:
       - image: singapore/lint-condo
 
 jobs:
-  pack-orb-to-single-file:
-    docker:
-      - image: circleci/circleci-cli:latest
-    steps:
-      - checkout
-      - cli/install # Install the circleci cli
-      - run:
-          name: Pack the contents of src/ to one single orb file
-          command: |
-            mkdir build
-            circleci config pack ./src > build/orb.yml
   lint:
     executor: lint-condo
     steps:
@@ -31,7 +19,6 @@ jobs:
 workflows:
   verify:
     jobs:
-      - pack-orb-to-single-file
       - lint
       - orb-tools/publish:
           name: publish
@@ -41,8 +28,6 @@ workflows:
               ignore: master
           orb-path: build/orb.yml
           orb-ref: entur/helm@dev:$CIRCLE_BRANCH
-          requires:
-            - pack-orb-to-single-file
       - orb-tools/increment:
           name: release
           context: orb-publishing
@@ -53,4 +38,4 @@ workflows:
           orb-ref: entur/helm
           requires:
             - lint
-            - pack-orb-to-single-file
+

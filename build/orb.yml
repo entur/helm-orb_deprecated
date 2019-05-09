@@ -30,7 +30,7 @@ commands:
     steps:
     - install-helm-client
     - run:
-        command: |-
+        command: |
           NAMESPACE="<< parameters.namespace >>"
           WAIT="<< parameters.wait >>"
           if [ -n "${NAMESPACE}" ]; then
@@ -51,7 +51,7 @@ commands:
       Requirements: curl
     steps:
     - run:
-        command: |-
+        command: |
           if which helm > /dev/null; then
             echo "Helm is already installed.. skipping install"
             exit 0
@@ -62,7 +62,7 @@ commands:
           mv /tmp/linux-amd64/helm /usr/local/bin/helm
           helm init --client-only
         name: Install and init the helm client
-description: |-
+description: |
   An orb for working with helm for kubernetes deployments in Google Cloud Platform.
   Made for Entur AS.
   Project homepage: https://github.com/entur/helm-orb
