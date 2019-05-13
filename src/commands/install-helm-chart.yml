@@ -27,6 +27,7 @@ parameters:
     default: true
 
 steps:
+  - authenticate-gcp
   - install-helm-client
   - run:
       name: Deploy Helm chart to Kubernetes
