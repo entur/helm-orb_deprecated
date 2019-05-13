@@ -68,5 +68,5 @@ steps:
         # cleanup. Clear the environment variables, delete the auth-file and log the client out.
         CREDENTIALS=""
         CLUSTER=""
-        rm -P ${HOME}/account-auth.json
+        rm -f ${HOME}/account-auth.json
         gcloud auth revoke
