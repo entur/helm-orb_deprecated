@@ -11,7 +11,7 @@ orbs:
 jobs:
   deploy-application:
     docker:
-    - image: google/cloud-sdk:latest
+      - image: google/cloud-sdk:latest
 
     steps:
       - helm/install-helm-chart:
