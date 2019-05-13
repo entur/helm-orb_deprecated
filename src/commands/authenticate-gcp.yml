@@ -64,9 +64,3 @@ steps:
         echo ${CREDENTIALS} > ${HOME}/account-auth.json
         gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
         gcloud --quiet container clusters get-credentials ${CLUSTER}
-
-        # cleanup. Clear the environment variables, delete the auth-file and log the client out.
-        CREDENTIALS=""
-        CLUSTER=""
-        rm -f ${HOME}/account-auth.json
-        gcloud auth revoke
