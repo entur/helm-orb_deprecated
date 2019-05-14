@@ -1,6 +1,8 @@
 # Entur - CircleCI Helm Orb
 This orb tries to simply huge CircleCI configuration files by adding common Helm functionality.
 
+https://circleci.com/orbs/registry/orb/entur/helm
+
 ## Requirements
 An executor that has `curl` and `gcloud` pre-installed.
 
