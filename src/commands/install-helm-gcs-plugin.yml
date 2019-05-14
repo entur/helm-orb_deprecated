@@ -1,0 +1,30 @@
+description: |
+  Installs a Helm plugin for Google Cloud Storage.
+
+  Plugin name: nouney/helm-gcs
+  Download from: (https://github.com/nouney/helm-gcs)
+
+parameters:
+  version:
+    description: |
+      The version of the plugin to be installed.
+      If not provided, the command will download the latest release version.
+    type: string
+    default: ""
+
+steps:
+  - install-helm-client
+  - run:
+      name: Install Helm GCS plugin
+      command: |
+        if [[ -n $(helm plugin list | grep gcs) ]]; then
+          echo "Helm GCS plugin is already installed. Skipping installation."
+          exit 0
+        fi
+
+        echo "Installing it Helm GCS Plugin now."
+        VERSION=""
+        if [[ -n "<< parameters.version >>" ]]; then
+          VERSION=" --version << parameters.version >>"
+        fi
+        helm plugin install "https://github.com/nouney/helm-gcs"${VERSION}
