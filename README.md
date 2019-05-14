@@ -1,6 +1,9 @@
 # Entur - CircleCI Helm Orb
 This orb tries to simply huge CircleCI configuration files by adding common Helm functionality.
 
+## Requirements
+An executor that has `curl` and `gcloud` pre-installed.
+
 ## Usage
 
 Import the orb and give it a name. Add this to the `orbs`-key in your CircleCI-configuration:
@@ -16,7 +19,10 @@ Use the orb like this:
 jobs:
   your-job-name:
     steps:
-     - helm/install-helm-client
+     - helm/install-helm-chart:
+         chart: Chart.yaml
+         namespace: development
+         release-name: my-release
      # do more CircleCI stuff.
 ``` 
          
@@ -39,14 +45,8 @@ Validate that the orb is valid:
 circleci orb validate orb.yml
 ```
 
-Publish a dev version of the orb (note: dev orbs are mutuable. E.g. you can publish many times):
-```bash
-circleci orb publish entur orb.yml entur/helm@dev:first     
-```      
+After commit & push to the repository, the orb will be automatically published as part of the workflow in CircleCI. 
 
-When ready, promote the orb to production:
-```bash
-circleci orb publish promote entur/helm@dev:first patch
-```
+A dev-orb will be published as: `entur/helm@dev:YOUR-BRANCH-NAME`. Release orbs are created on push to the master branch. 
 
 You can read more here: https://circleci.com/docs/2.0/creating-orbs/

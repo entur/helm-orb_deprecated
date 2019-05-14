@@ -1,0 +1,24 @@
+description: |
+  Demonstrate installing the helm client with this orb.
+
+usage:
+  version: 2.1
+
+orbs:
+  helm: entur/helm@volatile # Use volatile if you always want the newest version.
+
+
+jobs:
+  deploy-application:
+    docker:
+      - image: circleci/image:version # Use an executor that supports curl. All official circleci images curl pre-installed (with a few exceptions)
+
+    steps:
+      - helm/install-helm-client # This command doesn't have any parameters.
+
+workflows:
+  version: 2.1
+
+  my-workflow:
+    jobs:
+      - deploy-application
