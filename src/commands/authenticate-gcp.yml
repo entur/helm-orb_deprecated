@@ -18,7 +18,7 @@ parameters:
   gcp-container-cluster:
     description: |
       The name of the Google Cloud container cluster to use.
-      If not provided, the command will look for the environment variable $CLOUDSDK_CONTAINER_CLUSTER
+      If not provided, the command will look for the environment variable $CLOUDSDK_CONTAINER_CLUSTER.
 
       To obtain the name of your clusters,
       use the Google Cloud Platform Console (Command: gcloud container clusters list)
@@ -50,6 +50,9 @@ steps:
           exit 1
         fi
 
+        echo ${CREDENTIALS} > ${HOME}/account-auth.json
+        gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
+
         CLUSTER="<< parameters.gcp-container-cluster >>"
         if [[ -n "${CLUSTER}" ]]; then
           echo "Using cluster provided in parameters."
@@ -57,10 +60,9 @@ steps:
           echo "Using cluster from environment."
           CLUSTER="${CLOUDSDK_CONTAINER_CLUSTER}"
         else
-          echo "No cluster were found. Looked in parameters and environment."
-          exit 1
+          echo "No cluster were found. Looked in parameters and environment. Skipping authenticating to cluster."
         fi
 
-        echo ${CREDENTIALS} > ${HOME}/account-auth.json
-        gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
-        gcloud --quiet container clusters get-credentials ${CLUSTER}
+        if [[ -n "${CLUSTER}" ]]; then
+          gcloud --quiet container clusters get-credentials ${CLUSTER}
+        fi

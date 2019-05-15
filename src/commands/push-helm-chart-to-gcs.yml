@@ -19,11 +19,21 @@ parameters:
       Specify a chart reference (e.g. helm/mychart),
       or a path to an unpacked chart directory (e.g. ./helm)
     type: string
-  packed-chart-name:
+  app-version: # TODO: Not implemented
     description: |
-      Specify the name of the packed chart.
-      The command will pack the specified chart to a compressed .tgz file.
+      Set the appVersion on the chart to this version.
     type: string
+    default: ""
+  version: # TODO: Not implemented
+    description: |
+      Set the version on the chart to this semver version
+    type: string
+    default: ""
+  dependency-update: # TODO: Not implemented
+    description: |
+      Update dependencies from "requirements.yaml" before packaging
+    type: boolean
+    default: false
 
   #| ---- Helm GCS Plugin ---- |#
   gcs-plugin-version:
@@ -74,13 +84,13 @@ steps:
       name: Package Helm chart
       command: |
         CHART_LOCATION="<< parameters.chart >>"
-        PACKED_CHART_NAME="<< parameters.packed-chart-name >>"
-        echo "Packing chart from ${CHART_LOCATION} to ${PACKED_CHART_NAME}.tgz"
-        helm package ${CHART_LOCATION}
+        mkdir -p build/helm
+        echo "Packing chart from ${CHART_LOCATION} to build/helm."
+        helm package ${CHART_LOCATION} --destination build/helm
   - run:
       name: Push Helm chart to GCS bucket
       command: |
         BUCKET_NAME="<< parameters.gcs-bucket-name >>"
-        PACKED_CHART_NAME="<< parameters.packed-chart-name >>"
+        PACKED_CHART_NAME=$(basename build/helm/*)
         echo "Preparing to push ${PACKED_CHART_NAME}.tgz to ${BUCKET_NAME}."
         helm gcs push ${PACKED_CHART_NAME}.tgz ${BUCKET_NAME}
