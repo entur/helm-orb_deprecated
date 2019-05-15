@@ -8,7 +8,7 @@ parameters:
   version:
     description: |
       The version of the plugin to be installed.
-      If not provided, the command will download the latest release version.
+      If not provided, the command will install the latest release version.
     type: string
     default: ""
 
