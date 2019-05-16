@@ -75,9 +75,10 @@ steps:
       command: |
         BUCKET_NAME="<< parameters.gcs-bucket-name >>"
         echo "Initializing ${BUCKET_NAME}."
-        helm gcs init gs://${BUCKET_NAME} --service-account ${HOME}/account-auth.json"
+        helm gcs init gs://${BUCKET_NAME} --service-account ${HOME}/account-auth.json
 
         echo "Adding ${BUCKET_NAME} as repository."
+        export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
         helm repo add ${BUCKET_NAME} gs://${BUCKET_NAME}
   - run:
       name: Package Helm chart
@@ -91,5 +92,6 @@ steps:
       command: |
         BUCKET_NAME="<< parameters.gcs-bucket-name >>"
         PACKED_CHART_NAME=$(basename build/helm/*.tgz)
-        echo "Preparing to push ${PACKED_CHART_NAME}.tgz to ${BUCKET_NAME}."
-        helm gcs push ${PACKED_CHART_NAME}.tgz ${BUCKET_NAME}
+        echo "Preparing to push ${PACKED_CHART_NAME} to ${BUCKET_NAME}."
+        helm gcs push build/helm/${PACKED_CHART_NAME} ${BUCKET_NAME} --service-account ${HOME}/account-auth.json
+        echo "${PACKED_CHART_NAME} pushed to ${BUCKET_NAME} successfully."
