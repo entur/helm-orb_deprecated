@@ -15,7 +15,7 @@ jobs:
 
 
     steps:
-      - helm/authenticate-gcp:
+      - helm/authenticate-gcp-container-cluster:
           gcp-service-key: "{'json':'here'}" # If not provided, the command will look for the environment variable GCLOUD_SERVICE_KEY
           gcp-container-cluster: "mycluster" # If not provided, the command will look for the environment variable CLOUDSDK_CONTAINER_CLUSTER
 
