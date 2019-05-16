@@ -48,7 +48,7 @@ parameters:
     default: ""
 
 steps:
-  - authenticate-gcp:
+  - authenticate-gcp-container-cluster:
       gcp-service-key: << parameters.gcp-service-key >>
       gcp-container-cluster: << parameters.gcp-container-cluster >>
   - install-helm-client

@@ -67,7 +67,6 @@ parameters:
 steps:
   - authenticate-gcp:
       gcp-service-key: << parameters.gcp-service-key >>
-      gcp-container-cluster: << parameters.gcp-container-cluster >>
   - install-helm-client
   - install-helm-gcs-plugin:
       version: << parameters.gcs-plugin-version >>
@@ -91,6 +90,6 @@ steps:
       name: Push Helm chart to GCS bucket
       command: |
         BUCKET_NAME="<< parameters.gcs-bucket-name >>"
-        PACKED_CHART_NAME=$(basename build/helm/*)
+        PACKED_CHART_NAME=$(basename build/helm/*.tgz)
         echo "Preparing to push ${PACKED_CHART_NAME}.tgz to ${BUCKET_NAME}."
         helm gcs push ${PACKED_CHART_NAME}.tgz ${BUCKET_NAME}
