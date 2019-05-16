@@ -11,10 +11,10 @@ steps:
       command: |
         if which helm > /dev/null; then
           echo "Helm is already installed.. skipping install"
-          exit 0
+        else
+          HELM_VER="helm-v2.13.1-linux-amd64"
+          curl -L -o /tmp/$HELM_VER.tar.gz https://storage.googleapis.com/kubernetes-helm/$HELM_VER.tar.gz
+          tar -zxv -C /tmp -f /tmp/$HELM_VER.tar.gz
+          mv /tmp/linux-amd64/helm /usr/local/bin/helm
         fi
-        HELM_VER="helm-v2.13.1-linux-amd64"
-        curl -L -o /tmp/$HELM_VER.tar.gz https://storage.googleapis.com/kubernetes-helm/$HELM_VER.tar.gz
-        tar -zxv -C /tmp -f /tmp/$HELM_VER.tar.gz
-        mv /tmp/linux-amd64/helm /usr/local/bin/helm
         helm init --client-only
