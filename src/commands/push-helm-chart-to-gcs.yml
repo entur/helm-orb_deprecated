@@ -19,17 +19,17 @@ parameters:
       Specify a chart reference (e.g. helm/mychart),
       or a path to an unpacked chart directory (e.g. ./helm)
     type: string
-  app-version: # TODO: Not implemented
+  app-version:
     description: |
       Set the appVersion on the chart to this version.
     type: string
     default: ""
-  version: # TODO: Not implemented
+  version:
     description: |
       Set the version on the chart to this semver version
     type: string
     default: ""
-  dependency-update: # TODO: Not implemented
+  dependency-update:
     description: |
       Update dependencies from "requirements.yaml" before packaging
     type: boolean
@@ -83,6 +83,22 @@ steps:
   - run:
       name: Package Helm chart
       command: |
+        APP_VERSION="<< parameters.app-version >>"
+        VERSION="<< parameters.version >>"
+        DEPENDENCY_UPDATE=<< parameters.dependency-update >>
+
+        if [ -n "${APP_VERSION}" ]; then
+            set -- "$@" --app-version="${APP_VERSION}"
+        fi
+
+        if [ -n "${VERSION}" ]; then
+            set -- "$@" --version="${VERSION}"
+        fi
+
+        if [ ${DEPENDENCY_UPDATE} ]; then
+            set -- "$@" --dependency-update
+        fi
+
         CHART_LOCATION="<< parameters.chart >>"
         mkdir -p build/helm
         echo "Packing chart from ${CHART_LOCATION} to build/helm."
