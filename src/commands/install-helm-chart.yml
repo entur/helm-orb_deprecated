@@ -1,5 +1,5 @@
 description: |
-  Installs a helm chart in Kubernetes.
+  Installs a Helm chart in Kubernetes.
 
 parameters:
   chart:
@@ -25,6 +25,8 @@ parameters:
       Whether to wait for the installation to be complete. Default true
     type: boolean
     default: true
+
+  #| ---- Authentication ---- |#
   gcp-service-key:
     description: |
       The credentials for the Service Account to be used when communicating to Google Cloud.
@@ -46,7 +48,7 @@ parameters:
     default: ""
 
 steps:
-  - authenticate-gcp:
+  - authenticate-gcp-container-cluster:
       gcp-service-key: << parameters.gcp-service-key >>
       gcp-container-cluster: << parameters.gcp-container-cluster >>
   - install-helm-client

@@ -1,17 +1,18 @@
 description: |
-  Demonstrate installing a helm chart with this orb
+  Demonstrate installing a helm chart with this orb.
 
 usage:
   version: 2.1
 
 orbs:
-  helm: entur/helm@volatile # This orb is not registered yet. 07.05.2019 - Ole Reidar
+  helm: entur/helm@volatile # Use volatile if you always want the newest version.
 
 
 jobs:
   deploy-application:
     docker:
-      - image: google/cloud-sdk:latest
+      - image: entur/cci-toolbox:2.0 # This executor comes with a lof of pre-installed features; including gcloud.
+
 
     steps:
       - helm/install-helm-chart:
@@ -19,7 +20,6 @@ jobs:
           namespace: $NAMESPACE # From Context
           release-name: $CIRCLE_PROJECT_REPONAME-my-release-$NAMESPACE # output: projectname-my-release-namespace
           wait: true # default true, this step is not needed
-
 
 workflows:
   version: 2.1

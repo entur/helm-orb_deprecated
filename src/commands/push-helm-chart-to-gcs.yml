@@ -1,0 +1,113 @@
+description: |
+  Pack and push a Helm chart to Google Cloud Storage.
+
+  This command does all the necessary operations to pack and push a Helm chart to GCP.
+  These operations include:
+  - Authenticate to Google Cloud Platform
+  - Install the Helm client
+  - Install the Helm GCS plugin
+  - Pack the helm chart to a compressed file
+  - Push to selected bucket
+
+parameters:
+  gcs-bucket-name:
+    description: |
+      The name of the bucket in Google Cloud Storage.
+    type: string
+  chart:
+    description: |
+      Specify a chart reference (e.g. helm/mychart),
+      or a path to an unpacked chart directory (e.g. ./helm)
+    type: string
+  app-version:
+    description: |
+      Set the appVersion on the chart to this version.
+    type: string
+    default: ""
+  version:
+    description: |
+      Set the version on the chart to this semver version
+    type: string
+    default: ""
+  dependency-update:
+    description: |
+      Update dependencies from "requirements.yaml" before packaging
+    type: boolean
+    default: false
+
+  #| ---- Helm GCS Plugin ---- |#
+  gcs-plugin-version:
+    description: |
+      The version of the Helm GCS plugin to be installed.
+      If not provided, the command will install the latest release version.
+    type: string
+    default: ""
+
+  #| ---- Authentication ---- |#
+  gcp-service-key:
+    description: |
+      The credentials for the Service Account to be used when communicating to Google Cloud.
+      If not provided, the command will look for the environment variable $GCLOUD_SERVICE_KEY
+
+      To obtain the key for this command,
+      use either the Google Cloud Platform Console or gcloud iam service-accounts keys create.
+      The key can be .json (preferred) or .p12 (legacy) format.
+    type: string
+    default: ""
+  gcp-container-cluster:
+    description: |
+      The name of the Google Cloud container cluster to use.
+      If not provided, the command will look for the environment variable $CLOUDSDK_CONTAINER_CLUSTER
+
+      To obtain the name of your clusters,
+      use the Google Cloud Platform Console (Command: gcloud container clusters list)
+    type: string
+    default: ""
+
+steps:
+  - authenticate-gcp:
+      gcp-service-key: << parameters.gcp-service-key >>
+  - install-helm-client
+  - install-helm-gcs-plugin:
+      version: << parameters.gcs-plugin-version >>
+  - run:
+      name: Initialize and add GCS repository
+      command: |
+        BUCKET_NAME="<< parameters.gcs-bucket-name >>"
+        echo "Initializing ${BUCKET_NAME}."
+        helm gcs init gs://${BUCKET_NAME} --service-account ${HOME}/account-auth.json
+
+        echo "Adding ${BUCKET_NAME} as repository."
+        export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
+        helm repo add ${BUCKET_NAME} gs://${BUCKET_NAME}
+  - run:
+      name: Package Helm chart
+      command: |
+        APP_VERSION="<< parameters.app-version >>"
+        VERSION="<< parameters.version >>"
+        DEPENDENCY_UPDATE=<< parameters.dependency-update >>
+
+        if [ -n "${APP_VERSION}" ]; then
+            set -- "$@" --app-version="${APP_VERSION}"
+        fi
+
+        if [ -n "${VERSION}" ]; then
+            set -- "$@" --version="${VERSION}"
+        fi
+
+        if [ ${DEPENDENCY_UPDATE} ]; then
+            set -- "$@" --dependency-update
+        fi
+
+        CHART_LOCATION="<< parameters.chart >>"
+        mkdir -p build/helm
+        echo "Packing chart from ${CHART_LOCATION} to build/helm."
+        helm package ${CHART_LOCATION} --destination build/helm
+  - run:
+      name: Push Helm chart to GCS bucket
+      command: |
+        BUCKET_NAME="<< parameters.gcs-bucket-name >>"
+        PACKED_CHART_NAME=$(basename build/helm/*.tgz)
+        echo "Preparing to push ${PACKED_CHART_NAME} to ${BUCKET_NAME}."
+        helm gcs push build/helm/${PACKED_CHART_NAME} ${BUCKET_NAME} --service-account ${HOME}/account-auth.json
+        echo "${PACKED_CHART_NAME} pushed to ${BUCKET_NAME} successfully."

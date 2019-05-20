@@ -1,0 +1,21 @@
+version: 2.1
+
+orbs:
+  helm: entur/helm@dev:feature/helm-gcs-plugin
+
+jobs:
+  deploy-application:
+    docker:
+      - image: circleci/image:version
+
+    steps:
+      - helm/push-helm-chart-to-gcs:
+          gcs-bucket-name: entur-helm-charts
+          chart: ./helm/app
+
+workflows:
+  version: 2.1
+
+  my-workflow:
+    jobs:
+      - deploy-application
