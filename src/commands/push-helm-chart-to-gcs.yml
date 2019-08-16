@@ -102,6 +102,7 @@ steps:
         CHART_LOCATION="<< parameters.chart >>"
         mkdir -p build/helm
         echo "Packing chart from ${CHART_LOCATION} to build/helm."
+        export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
         helm package ${CHART_LOCATION} --destination build/helm "$@"
   - run:
       name: Push Helm chart to GCS bucket
