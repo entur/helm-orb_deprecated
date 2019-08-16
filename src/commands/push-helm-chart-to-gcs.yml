@@ -102,6 +102,7 @@ steps:
         CHART_LOCATION="<< parameters.chart >>"
         mkdir -p build/helm
         echo "Packing chart from ${CHART_LOCATION} to build/helm."
+        export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
         helm package ${CHART_LOCATION} --destination build/helm "$@"
   - run:
       name: Push Helm chart to GCS bucket
@@ -109,5 +110,6 @@ steps:
         BUCKET_NAME="<< parameters.gcs-bucket-name >>"
         PACKED_CHART_NAME=$(basename build/helm/*.tgz)
         echo "Preparing to push ${PACKED_CHART_NAME} to ${BUCKET_NAME}."
+        export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
         helm gcs push build/helm/${PACKED_CHART_NAME} ${BUCKET_NAME} --service-account ${HOME}/account-auth.json
         echo "${PACKED_CHART_NAME} pushed to ${BUCKET_NAME} successfully."
