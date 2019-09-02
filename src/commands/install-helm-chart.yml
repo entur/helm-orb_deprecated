@@ -20,6 +20,13 @@ parameters:
       Examples: dev, staging, production, kafka
     type: string
     default: ""
+  value-files:
+    description: |
+      Specify values in a YAML file or a URL (can specify multiple).
+      Separated by comma ( , )
+      (e.g. helm/some-values.yaml, helm/other-values.yaml)
+    type: string
+    default: ""
   wait:
     description: |
       Whether to wait for the installation to be complete. Default true
@@ -56,12 +63,19 @@ steps:
       name: Deploy Helm chart to Kubernetes
       command: |
         NAMESPACE="<< parameters.namespace >>"
+        VALUE_FILES="<< parameters.value-files >>"
         WAIT="<< parameters.wait >>"
-        if [ -n "${NAMESPACE}" ]; then
+        if [[ -n "${NAMESPACE}" ]]; then
           set -- "$@" --namespace="${NAMESPACE}"
           set -- "$@" --set environment="${NAMESPACE}"
         fi
-        if [ "${WAIT}" == "true" ]; then
+        if [[ -n "${VALUE_FILES}" ]]; then
+            SPLIT_VALUE_FILES=($(echo ${VALUE_FILES} | tr "," "\n"))
+            for i in ${SPLIT_VALUE_FILES[@]} ; do
+                set -- "$@" -f "${i}"
+            done
+        fi
+        if [[ "${WAIT}" == "true" ]]; then
           set -- "$@" --wait
         fi
         helm upgrade --install << parameters.release-name >> << parameters.chart >> "$@"
