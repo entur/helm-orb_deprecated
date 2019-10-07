@@ -64,6 +64,7 @@ steps:
       command: |
         NAMESPACE="<< parameters.namespace >>"
         VALUE_FILES="<< parameters.value-files >>"
+        CHART="<< parameters.chart >>"
         WAIT="<< parameters.wait >>"
         if [[ -n "${VALUE_FILES}" ]]; then
             SPLIT_VALUE_FILES=($(echo ${VALUE_FILES} | tr "," "\n"))
@@ -78,7 +79,10 @@ steps:
         if [[ "${WAIT}" == "true" ]]; then
           set -- "$@" --wait
         fi
-        helm dependency list
-        helm dependency update
-        helm dependency build
+        if [[ -f "${CHART}/requirements.yaml" ]]; then
+          cd "${CHART}"
+          helm dependency list
+          helm dependency update
+          helm dependency build
+        fi
         helm upgrade << parameters.release-name >> << parameters.chart >> "$@" --install
