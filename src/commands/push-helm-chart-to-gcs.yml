@@ -97,11 +97,12 @@ steps:
         fi
 
         if [ ${DEPENDENCY_UPDATE} ]; then
+          echo "Listing dependencies"
+          helm dependency list ${CHART_LOCATION}
           echo "Updating dependencies"
-          cd "${CHART_LOCATION}"
-          helm dependency list
-          helm dependency update
-          helm dependency build
+          helm dependency update ${CHART_LOCATION}
+          echo "Building dependencies"
+          helm dependency build ${CHART_LOCATION}
         fi
 
         mkdir -p build/helm
