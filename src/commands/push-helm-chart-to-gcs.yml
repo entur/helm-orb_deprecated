@@ -85,7 +85,7 @@ steps:
       command: |
         APP_VERSION="<< parameters.app-version >>"
         VERSION="<< parameters.version >>"
-        DEPENDENCY_UPDATE=<< parameters.dependency-update >>
+        DEPENDENCY_UPDATE="<< parameters.dependency-update >>"
 
         if [ -n "${APP_VERSION}" ]; then
             set -- "$@" --app-version="${APP_VERSION}"

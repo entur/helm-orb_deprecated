@@ -66,7 +66,6 @@ steps:
         VALUE_FILES="<< parameters.value-files >>"
         CHART="<< parameters.chart >>"
         WAIT="<< parameters.wait >>"
-        BUCKET_NAME="<< parameters.gcs-bucket-name >>"        
         if [[ -n "${VALUE_FILES}" ]]; then
             SPLIT_VALUE_FILES=($(echo ${VALUE_FILES} | tr "," "\n"))
             for i in ${SPLIT_VALUE_FILES[@]} ; do
@@ -80,16 +79,15 @@ steps:
         if [[ "${WAIT}" == "true" ]]; then
           set -- "$@" --wait
         fi
-        if [[ -f "${CHART}/requirements.yaml" ]]; then
-          echo "Initializing ${BUCKET_NAME}."
-          helm gcs init gs://${BUCKET_NAME} --service-account ${HOME}/account-auth.json
-          echo "Adding ${BUCKET_NAME} as repository."
-          export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
-          helm repo add ${BUCKET_NAME} gs://${BUCKET_NAME}
-          echo "Updating dependencies"
-          cd "${CHART}"
-          helm dependency list
-          helm dependency update
-          helm dependency build
-        fi
         helm upgrade << parameters.release-name >> << parameters.chart >> "$@" --install
+
+#        BUCKET_NAME="<< parameters.gcs-bucket-name >>"        
+#        if [[ -f "${CHART}/requirements.yaml" ]]; then
+#          echo "adding ${BUCKET_NAME}."
+#          helm repo add ${BUCKET_NAME} gs://${BUCKET_NAME}
+#          echo "Updating dependencies"
+#          cd "${CHART}"
+#          helm dependency list
+#          helm dependency update
+#          helm dependency build
+#        fi
