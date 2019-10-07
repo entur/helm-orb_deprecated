@@ -78,4 +78,7 @@ steps:
         if [[ "${WAIT}" == "true" ]]; then
           set -- "$@" --wait
         fi
+        helm dependency list
+        helm dependency update
+        helm dependency build
         helm upgrade << parameters.release-name >> << parameters.chart >> "$@" --install
