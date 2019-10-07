@@ -85,6 +85,7 @@ steps:
       command: |
         APP_VERSION="<< parameters.app-version >>"
         VERSION="<< parameters.version >>"
+        CHART_LOCATION="<< parameters.chart >>"
         DEPENDENCY_UPDATE="<< parameters.dependency-update >>"
 
         if [ -n "${APP_VERSION}" ]; then
@@ -96,10 +97,13 @@ steps:
         fi
 
         if [ ${DEPENDENCY_UPDATE} ]; then
-            set -- "$@" --dependency-update
+          echo "Updating dependencies"
+          cd "${CHART_LOCATION}"
+          helm dependency list
+          helm dependency update
+          helm dependency build
         fi
 
-        CHART_LOCATION="<< parameters.chart >>"
         mkdir -p build/helm
         echo "Packing chart from ${CHART_LOCATION} to build/helm."
         export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json

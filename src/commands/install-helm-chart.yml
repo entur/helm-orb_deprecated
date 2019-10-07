@@ -64,7 +64,6 @@ steps:
       command: |
         NAMESPACE="<< parameters.namespace >>"
         VALUE_FILES="<< parameters.value-files >>"
-        CHART="<< parameters.chart >>"
         WAIT="<< parameters.wait >>"
         if [[ -n "${VALUE_FILES}" ]]; then
             SPLIT_VALUE_FILES=($(echo ${VALUE_FILES} | tr "," "\n"))
@@ -80,14 +79,3 @@ steps:
           set -- "$@" --wait
         fi
         helm upgrade << parameters.release-name >> << parameters.chart >> "$@" --install
-
-#        BUCKET_NAME="<< parameters.gcs-bucket-name >>"        
-#        if [[ -f "${CHART}/requirements.yaml" ]]; then
-#          echo "adding ${BUCKET_NAME}."
-#          helm repo add ${BUCKET_NAME} gs://${BUCKET_NAME}
-#          echo "Updating dependencies"
-#          cd "${CHART}"
-#          helm dependency list
-#          helm dependency update
-#          helm dependency build
-#        fi
