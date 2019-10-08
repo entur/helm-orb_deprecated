@@ -32,7 +32,11 @@ parameters:
       Whether to wait for the installation to be complete. Default true
     type: boolean
     default: true
-
+  debug:
+    description: |
+      Run helm install with debug parameter. Default false
+    type: boolean
+    default: false
   #| ---- Authentication ---- |#
   gcp-service-key:
     description: |
