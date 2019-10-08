@@ -65,6 +65,7 @@ steps:
         NAMESPACE="<< parameters.namespace >>"
         VALUE_FILES="<< parameters.value-files >>"
         WAIT="<< parameters.wait >>"
+        DEBUG="<< parameters.debug >>"
         if [[ -n "${VALUE_FILES}" ]]; then
             SPLIT_VALUE_FILES=($(echo ${VALUE_FILES} | tr "," "\n"))
             for i in ${SPLIT_VALUE_FILES[@]} ; do
@@ -78,4 +79,7 @@ steps:
         if [[ "${WAIT}" == "true" ]]; then
           set -- "$@" --wait
         fi
+        if [[ "${DEBUG}" == "true" ]]; then
+          set -- "$@" --debug
+        fi        
         helm upgrade << parameters.release-name >> << parameters.chart >> "$@" --install
