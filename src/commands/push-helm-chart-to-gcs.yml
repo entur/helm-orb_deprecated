@@ -29,11 +29,6 @@ parameters:
       Set the version on the chart to this semver version
     type: string
     default: ""
-  dependency-update:
-    description: |
-      Update dependencies from "requirements.yaml" before packaging
-    type: boolean
-    default: false
 
   #| ---- Helm GCS Plugin ---- |#
   gcs-plugin-version:
@@ -86,7 +81,6 @@ steps:
         APP_VERSION="<< parameters.app-version >>"
         VERSION="<< parameters.version >>"
         CHART_LOCATION="<< parameters.chart >>"
-        DEPENDENCY_UPDATE="<< parameters.dependency-update >>"
 
         if [ -n "${APP_VERSION}" ]; then
             set -- "$@" --app-version="${APP_VERSION}"
