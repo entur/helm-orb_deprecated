@@ -96,7 +96,7 @@ steps:
             set -- "$@" --version="${VERSION}"
         fi
 
-        if [ ${DEPENDENCY_UPDATE} ]; then
+        if [ -f "${CHART_LOCATION}/requirements.yaml" ]; then
           echo "Listing dependencies"
           helm dependency list ${CHART_LOCATION}
           echo "Updating dependencies"
