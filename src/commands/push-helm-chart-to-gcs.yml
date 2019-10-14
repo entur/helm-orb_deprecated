@@ -6,6 +6,7 @@ description: |
   - Authenticate to Google Cloud Platform
   - Install the Helm client
   - Install the Helm GCS plugin
+  - Download dependencies from requirement.yaml file, if it exists
   - Pack the helm chart to a compressed file
   - Push to selected bucket
 
@@ -13,7 +14,7 @@ parameters:
   gcs-bucket-name:
     description: |
       The name of the bucket in Google Cloud Storage.
-    type: string
+    type: string    
   chart:
     description: |
       Specify a chart reference (e.g. helm/mychart),
