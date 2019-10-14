@@ -14,7 +14,7 @@ parameters:
   gcs-bucket-name:
     description: |
       The name of the bucket in Google Cloud Storage.
-    type: string    
+    type: string
   chart:
     description: |
       Specify a chart reference (e.g. helm/mychart),
