@@ -55,7 +55,7 @@ parameters:
     default: ""
 
 steps:
-  - authenticate-gcp-container-cluster:
+  - gcp-auth/authenticate-gcp-kubernetes:
       gcp-service-key: << parameters.gcp-service-key >>
       gcp-container-cluster: << parameters.gcp-container-cluster >>
   - install-helm-client

@@ -4,3 +4,5 @@ description: |
   An orb for working with helm for kubernetes deployments in Google Cloud Platform.
   Made for Entur AS.
   Project homepage: https://github.com/entur/helm-orb
+orbs:
+  gcp-auth: entur/gcp-auth@dev:refactor-gcp-auth
