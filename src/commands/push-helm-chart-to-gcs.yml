@@ -6,6 +6,7 @@ description: |
   - Authenticate to Google Cloud Platform
   - Install the Helm client
   - Install the Helm GCS plugin
+  - Download dependencies from requirement.yaml file, if it exists
   - Pack the helm chart to a compressed file
   - Push to selected bucket
 
@@ -29,11 +30,6 @@ parameters:
       Set the version on the chart to this semver version
     type: string
     default: ""
-  dependency-update:
-    description: |
-      Update dependencies from "requirements.yaml" before packaging
-    type: boolean
-    default: false
 
   #| ---- Helm GCS Plugin ---- |#
   gcs-plugin-version:
@@ -85,7 +81,7 @@ steps:
       command: |
         APP_VERSION="<< parameters.app-version >>"
         VERSION="<< parameters.version >>"
-        DEPENDENCY_UPDATE=<< parameters.dependency-update >>
+        CHART_LOCATION="<< parameters.chart >>"
 
         if [ -n "${APP_VERSION}" ]; then
             set -- "$@" --app-version="${APP_VERSION}"
@@ -95,11 +91,15 @@ steps:
             set -- "$@" --version="${VERSION}"
         fi
 
-        if [ ${DEPENDENCY_UPDATE} ]; then
-            set -- "$@" --dependency-update
+        if [ -f "${CHART_LOCATION}/requirements.yaml" ]; then
+          echo "Listing dependencies"
+          helm dependency list ${CHART_LOCATION}
+          echo "Updating dependencies"
+          helm dependency update ${CHART_LOCATION}
+          echo "Building dependencies"
+          helm dependency build ${CHART_LOCATION}
         fi
 
-        CHART_LOCATION="<< parameters.chart >>"
         mkdir -p build/helm
         echo "Packing chart from ${CHART_LOCATION} to build/helm."
         export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json

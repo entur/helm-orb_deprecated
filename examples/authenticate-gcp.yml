@@ -11,7 +11,7 @@ orbs:
 jobs:
   deploy-application:
     docker:
-      - image: entur/cci-toolbox:2.0 # This executor comes with a lof of pre-installed features; including gcloud.
+      - image: entur/cci-toolbox:2.1 # This executor comes with a lof of pre-installed features; including gcloud.
 
 
     steps:
