@@ -5,4 +5,4 @@ description: |
   Made for Entur AS.
   Project homepage: https://github.com/entur/helm-orb
 orbs:
-  gcp-auth: entur/gcp-auth@dev:refactor-gcp-auth
+  gcp-auth: entur/gcp-auth@volatile
