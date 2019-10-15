@@ -65,7 +65,7 @@ parameters:
     default: ""
 
 steps:
-  - gp-auth/authenticate-gcp:
+  - gcp-auth/authenticate-gcp:
       gcp-service-key: << parameters.gcp-service-key >>
   - install-helm-client
   - install-helm-gcs-plugin:
