@@ -76,7 +76,6 @@ steps:
         BUCKET_NAME="<< parameters.gcs-bucket-name >>"
         echo "Initializing ${BUCKET_NAME}."
         helm gcs init gs://${BUCKET_NAME} --service-account ${HOME}/account-auth.json
-
         echo "Adding ${BUCKET_NAME} as repository."
         export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
         helm repo add ${BUCKET_NAME} gs://${BUCKET_NAME}
@@ -85,24 +84,24 @@ steps:
       command: |
         APP_VERSION="<< parameters.app-version >>"
         VERSION="<< parameters.version >>"
-        DEPENDENCY_UPDATE=<< parameters.dependency-update >>
-
+        CHART_LOCATION="<< parameters.chart >>"
         if [ -n "${APP_VERSION}" ]; then
             set -- "$@" --app-version="${APP_VERSION}"
         fi
-
         if [ -n "${VERSION}" ]; then
             set -- "$@" --version="${VERSION}"
         fi
-
-        if [ ${DEPENDENCY_UPDATE} ]; then
-            set -- "$@" --dependency-update
+        export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
+        if [ -f "${CHART_LOCATION}/requirements.yaml" ]; then
+          echo "Listing dependencies"
+          helm dependency list ${CHART_LOCATION}
+          echo "Updating dependencies"
+          helm dependency update ${CHART_LOCATION}
+          echo "Building dependencies"
+          helm dependency build ${CHART_LOCATION}
         fi
-
-        CHART_LOCATION="<< parameters.chart >>"
         mkdir -p build/helm
         echo "Packing chart from ${CHART_LOCATION} to build/helm."
-        export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
         helm package ${CHART_LOCATION} --destination build/helm "$@"
   - run:
       name: Push Helm chart to GCS bucket

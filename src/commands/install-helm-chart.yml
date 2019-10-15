@@ -1,6 +1,5 @@
 description: |
   Installs a Helm chart in Kubernetes.
-
 parameters:
   chart:
     description: |
@@ -32,13 +31,16 @@ parameters:
       Whether to wait for the installation to be complete. Default true
     type: boolean
     default: true
-
+  debug:
+    description: |
+      Run helm install with debug parameter. Default false
+    type: boolean
+    default: false
   #| ---- Authentication ---- |#
   gcp-service-key:
     description: |
       The credentials for the Service Account to be used when communicating to Google Cloud.
       If not provided, the command will look for the environment variable $GCLOUD_SERVICE_KEY
-
       To obtain the key for this command,
       use either the Google Cloud Platform Console or gcloud iam service-accounts keys create.
       The key can be .json (preferred) or .p12 (legacy) format.
@@ -48,7 +50,6 @@ parameters:
     description: |
       The name of the Google Cloud container cluster to use.
       If not provided, the command will look for the environment variable $CLOUDSDK_CONTAINER_CLUSTER
-
       To obtain the name of your clusters,
       use the Google Cloud Platform Console (Command: gcloud container clusters list)
     type: string
@@ -65,6 +66,7 @@ steps:
         NAMESPACE="<< parameters.namespace >>"
         VALUE_FILES="<< parameters.value-files >>"
         WAIT="<< parameters.wait >>"
+        DEBUG="<< parameters.debug >>"
         if [[ -n "${VALUE_FILES}" ]]; then
             SPLIT_VALUE_FILES=($(echo ${VALUE_FILES} | tr "," "\n"))
             for i in ${SPLIT_VALUE_FILES[@]} ; do
@@ -77,5 +79,8 @@ steps:
         fi
         if [[ "${WAIT}" == "true" ]]; then
           set -- "$@" --wait
+        fi
+        if [[ "${DEBUG}" == "true" ]]; then
+          set -- "$@" --debug
         fi
         helm upgrade << parameters.release-name >> << parameters.chart >> "$@" --install
