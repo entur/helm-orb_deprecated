@@ -7,12 +7,10 @@ usage:
 orbs:
   helm: entur/helm@volatile # Use volatile if you always want the newest version.
 
-
 jobs:
   deploy-application:
     docker:
       - image: entur/cci-toolbox:2.0 # This executor comes with a lof of pre-installed features; including gcloud.
-
 
     steps:
       - helm/install-helm-chart:

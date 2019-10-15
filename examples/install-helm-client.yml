@@ -7,7 +7,6 @@ usage:
 orbs:
   helm: entur/helm@volatile # Use volatile if you always want the newest version.
 
-
 jobs:
   deploy-application:
     docker:
