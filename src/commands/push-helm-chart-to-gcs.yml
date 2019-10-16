@@ -77,13 +77,16 @@ steps:
         APP_VERSION="<< parameters.app-version >>"
         VERSION="<< parameters.version >>"
         CHART_LOCATION="<< parameters.chart >>"
+
         if [ -n "${APP_VERSION}" ]; then
             set -- "$@" --app-version="${APP_VERSION}"
         fi
         if [ -n "${VERSION}" ]; then
             set -- "$@" --version="${VERSION}"
         fi
+
         export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
+
         if [ -f "${CHART_LOCATION}/requirements.yaml" ]; then
           echo "Listing dependencies"
           helm dependency list ${CHART_LOCATION}
@@ -92,6 +95,7 @@ steps:
           echo "Building dependencies"
           helm dependency build ${CHART_LOCATION}
         fi
+
         mkdir -p build/helm
         echo "Packing chart from ${CHART_LOCATION} to build/helm."
         helm package ${CHART_LOCATION} --destination build/helm "$@"
