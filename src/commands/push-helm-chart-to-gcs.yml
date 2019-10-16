@@ -36,6 +36,25 @@ parameters:
       If not provided, the command will install the latest release version.
     type: string
     default: ""
+  
+  #| ---- Authentication ---- |#	
+  gcp-service-key:	
+    description: |	
+      The credentials for the Service Account to be used when communicating to Google Cloud.	
+      If not provided, the command will look for the environment variable $GCLOUD_SERVICE_KEY	
+      To obtain the key for this command,	
+      use either the Google Cloud Platform Console or gcloud iam service-accounts keys create.	
+      The key can be .json (preferred) or .p12 (legacy) format.	
+    type: string	
+    default: ""	
+  gcp-container-cluster:	
+    description: |	
+      The name of the Google Cloud container cluster to use.	
+      If not provided, the command will look for the environment variable $CLOUDSDK_CONTAINER_CLUSTER	
+      To obtain the name of your clusters,	
+      use the Google Cloud Platform Console (Command: gcloud container clusters list)	
+    type: string	
+    default: ""
 
 steps:
   - gcp-auth/authenticate-gcp:
