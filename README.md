@@ -1,4 +1,4 @@
-# Entur - CircleCI Helm Orb
+# Entur - CircleCI Helm Orb [![CircleCI](https://circleci.com/gh/entur/helm-orb/tree/master.svg?style=svg)](https://circleci.com/gh/entur/helm-orb/tree/master)
 This orb tries to simply huge CircleCI configuration files by adding common Helm functionality.
 
 https://circleci.com/orbs/registry/orb/entur/helm
