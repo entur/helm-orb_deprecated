@@ -5,7 +5,7 @@ description: |
   - Authenticate to Google Cloud Platform
   - Install the Helm client
   - Install the Helm GCS plugin
-  - Download dependencies from requirement.yaml file, if it exists
+  - Download dependencies from requirements.yaml file, if it exists
   - Pack the helm chart to a compressed file
   - Push to selected bucket
 parameters:
