@@ -54,11 +54,18 @@ parameters:
       use the Google Cloud Platform Console (Command: gcloud container clusters list)
     type: string
     default: ""
+  gcp-container-region:
+    description: |
+      The name of the Google Cloud regional cluster to use.
+      If region is not provided, the command will use zone and look for the environment variable $CLOUDSDK_CONTAINER_ZONE
+    type: string
+    default: ""
 
 steps:
   - gcp-auth/authenticate-gcp-kubernetes:
       gcp-service-key: << parameters.gcp-service-key >>
       gcp-container-cluster: << parameters.gcp-container-cluster >>
+      gcp-container-region: << parameters.gcp-container-region >>
   - install-helm-client
   - run:
       name: Deploy Helm chart to Kubernetes
