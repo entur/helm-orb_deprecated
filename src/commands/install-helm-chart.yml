@@ -54,6 +54,12 @@ parameters:
       use the Google Cloud Platform Console (Command: gcloud container clusters list)
     type: string
     default: ""
+  gcp-container-zone:
+    description: |
+      The name of the Google Cloud zone to use.
+      If zone is not provided, the command will look for the environment variable $CLOUDSDK_CONTAINER_ZONE
+    type: string
+    default: ""
   gcp-container-region:
     description: |
       The name of the Google Cloud regional cluster to use.
@@ -65,6 +71,7 @@ steps:
   - gcp-auth/authenticate-gcp-kubernetes:
       gcp-service-key: << parameters.gcp-service-key >>
       gcp-container-cluster: << parameters.gcp-container-cluster >>
+      gcp-container-zone: << parameters.gcp-container-zone >>
       gcp-container-region: << parameters.gcp-container-region >>
   - install-helm-client
   - run:
