@@ -39,8 +39,8 @@ parameters:
   timeout:
     description: |
       Amount of time in seconds to wait for --wait to verify deployment.
-      type: integer
-      default: 300
+    type: integer
+    default: 300
   #| ---- Authentication ---- |#
   gcp-service-key:
     description: |
