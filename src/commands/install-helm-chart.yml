@@ -36,6 +36,11 @@ parameters:
       Run helm install with debug parameter. Default false
     type: boolean
     default: false
+  timeout:
+    description: |
+      Amount of time in seconds to wait for --wait to verify deployment.
+      type: integer
+      default: 300
   #| ---- Authentication ---- |#
   gcp-service-key:
     description: |
@@ -81,6 +86,7 @@ steps:
         VALUE_FILES="<< parameters.value-files >>"
         WAIT="<< parameters.wait >>"
         DEBUG="<< parameters.debug >>"
+        TIMEOUT="<< parameters.timeout >>"
         if [[ -n "${VALUE_FILES}" ]]; then
             SPLIT_VALUE_FILES=($(echo ${VALUE_FILES} | tr "," "\n"))
             for i in ${SPLIT_VALUE_FILES[@]} ; do
@@ -97,4 +103,6 @@ steps:
         if [[ "${DEBUG}" == "true" ]]; then
           set -- "$@" --debug
         fi
+        if [[ "${TIMEOUT}"" != 300]]; then
+          set -- "$@" --timeout ${TIMEOUT}
         helm upgrade << parameters.release-name >> << parameters.chart >> "$@" --install
