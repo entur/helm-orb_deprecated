@@ -103,6 +103,6 @@ steps:
         if [[ "${DEBUG}" == "true" ]]; then
           set -- "$@" --debug
         fi
-        if [[ "${TIMEOUT}"" != 300]]; then
+        if [[ "${TIMEOUT}" != 300]]; then
           set -- "$@" --timeout ${TIMEOUT}
         helm upgrade << parameters.release-name >> << parameters.chart >> "$@" --install
