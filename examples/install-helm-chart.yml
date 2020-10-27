@@ -10,8 +10,10 @@ orbs:
 jobs:
   deploy-application:
     docker:
-      - image: entur/cci-toolbox:2.1 # This executor comes with a lof of pre-installed features; including gcloud.
-
+      - image: entur/cci-toolbox:3.0 # This executor comes with a lof of pre-installed features; including gcloud.
+        auth: # Add $DOCKERHUB_LOGIN and $DOCKERHUB_PASSWORD credentials in your context to log in to Docker hub
+          username: $DOCKERHUB_LOGIN
+          password: $DOCKERHUB_PASSWORD
     steps:
       - helm/install-helm-chart:
           chart: ./helm/$CIRCLE_PROJECT_REPONAME # file structure: helm/projectname/Chart.yaml
