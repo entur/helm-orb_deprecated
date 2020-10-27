@@ -5,6 +5,7 @@ https://circleci.com/orbs/registry/orb/entur/helm
 
 ## Requirements
 An executor that has `curl` and `gcloud` pre-installed.
+Add $DOCKERHUB_LOGIN and $DOCKERHUB_PASSWORD credentials in your context to log in to Docker hub
 
 ## Usage
 
