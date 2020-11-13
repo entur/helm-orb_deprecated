@@ -1,7 +1,7 @@
 description: |
   Install the Helm client.
-  Helm version: helm-v2.16.7-linux-amd64
-  Download from: (https://get.helm.sh/helm-v2.16.7-linux-amd64.tar.gz)
+  Helm version: helm-v2.16.0-linux-amd64
+  Download from: (https://get.helm.sh/helm-v2.16.0-linux-amd64.tar.gz)
   Requirements: curl
 
 steps:
@@ -11,7 +11,7 @@ steps:
         if which helm > /dev/null; then
           echo "Helm is already installed.. skipping install"
         else
-          HELM_VER="helm-v2.16.7-linux-amd64"
+          HELM_VER="helm-v2.16.0-linux-amd64"
           curl -L -o /tmp/$HELM_VER.tar.gz https://get.helm.sh/$HELM_VER.tar.gz
           tar -zxv -C /tmp -f /tmp/$HELM_VER.tar.gz
           mv /tmp/linux-amd64/helm /usr/local/bin/helm
